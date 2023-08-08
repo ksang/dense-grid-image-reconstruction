@@ -1,0 +1,13 @@
+name: dgir
+channels:
+  - pytorch
+  - nvidia
+dependencies:
+  - python
+  - pytorch
+  - torchvision
+  - pytorch-cuda=11.8
+  - jupyter
+  - matplotlib
+  - tqdm
+  
