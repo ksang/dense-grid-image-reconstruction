@@ -29,11 +29,13 @@ class DenseGridImageDataset(Dataset):
 
         for i, f in enumerate(tqdm(files)):
             d = io.read_image(f)[:3,:,:]
-            self.images[i+1] = {
+            self.images[i] = {
                 "file": f,
                 "data": d,
                 "shape": d.shape,
             }
+
+        assert len(self.images) > 0, "no image found"
 
     def generate_samples(self):
         """
@@ -51,7 +53,10 @@ class DenseGridImageDataset(Dataset):
             samples = torch.cat([uv, im["data"]]).view(5,-1)    # [u, v, r, g, b]
             samples = torch.cat([torch.ones(1, samples.size(1))*image_id, samples])
             sample_list.append(samples.permute(1, 0))
-        self.samples = torch.cat(sample_list)
+        if len(sample_list) == 1:
+            self.samples = sample_list[0]
+        else:
+            self.samples = torch.cat(sample_list)
 
     def __len__(self):
         return len(self.samples)
