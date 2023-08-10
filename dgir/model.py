@@ -53,7 +53,7 @@ class DenseGridNet(nn.Module):
     ) -> None:
         super(DenseGridNet, self).__init__()
         self.resolution_x = torch.linspace(resolution_finest[0], resolution_coarsest[0], num_levels).int()
-        self.resolution_y = torch.linspace(resolution_finest[0], resolution_coarsest[0], num_levels).int()
+        self.resolution_y = torch.linspace(resolution_finest[1], resolution_coarsest[1], num_levels).int()
         self.feature_length = feature_length
         self.num_levels = num_levels
         # create and init embedding table for each level
