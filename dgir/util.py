@@ -1,5 +1,7 @@
 import torch
-import numpy as np
+from torch.optim import Adam, AdamW
+
+from .optimizer import MultiOptimizer
 
 def generate_recon_samples(image_id, width, height):
     """
@@ -52,3 +54,12 @@ def compute_dataset_psnr(model, dataset):
         score = compute_psnr(data, rec_img.cpu()).item()
         psnr.append(score)
     return psnr
+
+def create_optimizer(model, adam_params, adamw_params):
+    """
+    create customized optimizer for the model.
+    for embeddings, use Adam, for mlp, use AdamW.
+    """
+    adam_optim = Adam(model.embeddings.parameters(), **adam_params)
+    adamw_optim = AdamW(model.mlp.parameters(), **adamw_params)
+    return MultiOptimizer({"embeddings": adam_optim, "mlp": adamw_optim})
